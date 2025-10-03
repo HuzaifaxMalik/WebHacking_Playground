@@ -32,18 +32,6 @@ def sqli_flag(url):
                 sys.stdout.flush()
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("[+] Usage: %s url" %sys.argv[0])
