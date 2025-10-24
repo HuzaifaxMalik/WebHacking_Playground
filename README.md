@@ -1,2 +1,1 @@
-# sqli
-Repository containing SQL injection lab notes and scripts
+Repository containing web hacking lab notes and scripts
