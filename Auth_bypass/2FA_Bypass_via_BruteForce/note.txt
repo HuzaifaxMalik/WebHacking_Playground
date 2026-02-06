@@ -1,0 +1,8 @@
+Lab: https://portswigger.net/web-security/authentication/multi-factor/lab-2fa-bypass-using-a-brute-force-attack
+
+1. Initial Login using credentials, carlos:montoya
+2. 2FA verification
+    - Invalid 2 times --> redirect to Initial Login page
+    - Valid --> authenticated, and redirect to /my-account?id=carlos
+
+Run "script.py" to brute force & automate the process
