@@ -1,0 +1,2 @@
+- Capture the authentication req in BurpSuite
+- Replay the request by replacing password with the array containing multiple passwords
