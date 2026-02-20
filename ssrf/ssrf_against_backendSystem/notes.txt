@@ -1,0 +1,14 @@
+Lab link: https://portswigger.net/web-security/learning-paths/ssrf-attacks/ssrf-attacks-common-ssrf-attacks/ssrf/lab-basic-ssrf-against-localhost
+
+Vulnerable feature: Stock check functionality
+Goal: delete the user 'carlos' on backend 'http://192.168.0.x'
+
+### Analysis
+another backend server = 'http://192.168.0.110'
+admin page of 'http://192.168.0.110' = '/admin'
+delete carlos = '/admin/delete?username=carlos'
+
+### Steps to Solve the lab:
+1. Click view details of any product on the application
+2. Click 'Check Stock' & capture the request in BurpSuite
+3. Replay the request by changing the value of 'stockapi=' parameter to 'http://192.168.0.110/admin/delete?username=carlos'
